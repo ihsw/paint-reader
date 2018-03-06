@@ -31,5 +31,11 @@ export const parse = (input: string): Order => {
 
         return result.split("#")[0];
     }).map((result) => result.trim());
-    return new Order(Number(results[0]), []);
+
+    const colorCount = Number(results[0]);
+    if (isNaN(colorCount)) {
+        throw new Error("First line was NaN!");
+    }
+
+    return new Order(colorCount, []);
 };

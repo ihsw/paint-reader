@@ -14,4 +14,8 @@ describe("Parser", () => {
     it("Should strip comments from the input", () => {
         assert.equal(parse("5 # test").colorCount, 5);
     });
+
+    it("Should fail on NaN as first input", () => {
+        assert.throws(() => parse("ayy"));
+    });
 });
