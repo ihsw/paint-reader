@@ -1,0 +1,13 @@
+sudo: required
+language: node_js
+node_js:
+- 9
+
+install:
+- npm install -s
+- npm run -s build
+script:
+- npm run -s lint
+- npm run -s test-coverage
+- npm run -s coveralls-coverage
+- npm run -s test-coverage-report && npm run -s test-coverage-check
