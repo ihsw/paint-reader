@@ -1,0 +1,4 @@
+  5            # The first line specifies how many colors there are.
+  1 M 3 G 5 G  # Each subsequent line describes a customer. For example, this first customer likes color 1 in matte, color 3 in gloss and color 5 in gloss.
+  2 G 3 M 4 G  # This second customer would like color 2 in gloss, color 3 in matte and color 4 in gloss
+  5 M          # This third customer would like color 5 in matte
