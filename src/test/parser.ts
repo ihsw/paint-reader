@@ -10,4 +10,8 @@ describe("Parser", () => {
     it("Should fail on invalid input", () => {
         assert.throws(() => parse(""));
     });
+
+    it("Should strip comments from the input", () => {
+        assert.equal(parse("5 # test").colorCount, 5);
+    });
 });

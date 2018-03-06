@@ -24,6 +24,12 @@ export const parse = (input: string): Order => {
         throw new Error("Blank input!");
     }
 
-    const results = input.split("\n");
+    const results = input.split("\n").map((result) => {
+        if (result.indexOf("#") === -1) {
+            return result;
+        }
+
+        return result.split("#")[0];
+    }).map((result) => result.trim());
     return new Order(Number(results[0]), []);
 };
