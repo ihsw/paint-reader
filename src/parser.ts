@@ -19,11 +19,11 @@ export class Order {
     }
 }
 
-export const parse = (input: string): number => {
-    const results = input.split("\n");
-    if (results.length === 0) {
+export const parse = (input: string): Order => {
+    if (input.length === 0) {
         throw new Error("Blank input!");
     }
 
-    return Number(results[0]);
+    const results = input.split("\n");
+    return new Order(Number(results[0]), []);
 };
