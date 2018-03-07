@@ -72,4 +72,12 @@ describe("Parser", () => {
             {paints: [{color: 5, type: "M"}]}
         ]);
     });
+
+    it("Should fail on paint out of range", () => {
+        const paintOutOfRangeExample = fs.readFileSync("./test-fixtures/example-7-paint-out-of-range").toString();
+        assert.throws(
+            () => parse(paintOutOfRangeExample),
+            (err: ParseError) => err instanceof ParseError && err.code === ParseErrorCode.CustomerPaintOutOfRange
+        );
+    });
 });
