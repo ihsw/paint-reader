@@ -37,6 +37,22 @@ describe("Parser", () => {
         );
     });
 
+    it("Should fail on non-even customer order", () => {
+        const invalidFormatExample = fs.readFileSync("./test-fixtures/example-5-invalid-paint-format").toString();
+        assert.throws(
+            () => parse(invalidFormatExample),
+            (err: ParseError) => err instanceof ParseError && err.code === ParseErrorCode.InvalidPaintFormat
+        );
+    });
+
+    it("Should fail on invalid paint color", () => {
+        const invalidColorExample = fs.readFileSync("./test-fixtures/example-6-invalid-paint-color").toString();
+        assert.throws(
+            () => parse(invalidColorExample),
+            (err: ParseError) => err instanceof ParseError && err.code === ParseErrorCode.InvalidColor
+        );
+    });
+
     it("Should correctly parse plain customers", () => {
         const order = parse(palinExample);
         assert.equal(order.customers.length, 1);

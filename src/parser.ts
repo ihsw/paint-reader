@@ -2,7 +2,7 @@ export enum ParseErrorCode {
     BlankInput,
     MissingCustomers,
     InvalidColorCount,
-    InvalidPaintCount,
+    InvalidPaintFormat,
     InvalidColor
 }
 
@@ -63,7 +63,7 @@ export const parse = (input: string): Order => {
     const customers = results.slice(1).map((result, resultIndex) => {
         const paintResults = result.split(" ");
         if (paintResults.length % 2 > 0) {
-            throw new ParseError("Invalid paint count!", ParseErrorCode.InvalidPaintCount);
+            throw new ParseError("Invalid paint format!", ParseErrorCode.InvalidPaintFormat);
         }
 
         const paints: Paint[] = Array.from((new Array(paintResults.length / 2)).keys()).map((i) => {
