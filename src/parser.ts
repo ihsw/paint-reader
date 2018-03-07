@@ -1,3 +1,18 @@
+export enum ParseErrorCode {
+    BlankInput,
+    MissingOrders,
+    InvalidColorCount
+}
+
+export class ParseError extends Error {
+    code: ParseErrorCode;
+
+    constructor(message: string, code: ParseErrorCode) {
+        super(message);
+        this.code = code;
+    }
+}
+
 type Type = "M" | " G";
 
 interface Paint {
@@ -21,7 +36,7 @@ export class Order {
 
 export const parse = (input: string): Order => {
     if (input.length === 0) {
-        throw new Error("Blank input!");
+        throw new ParseError("Blank input!", ParseErrorCode.BlankInput);
     }
 
     const results = input.split("\n").map((result) => {
@@ -34,7 +49,11 @@ export const parse = (input: string): Order => {
 
     const colorCount = Number(results[0]);
     if (isNaN(colorCount)) {
-        throw new Error("First line was NaN!");
+        throw new ParseError("First line was NaN!", ParseErrorCode.InvalidColorCount);
+    }
+
+    if (results.length === 1) {
+        throw new ParseError("A paint color count was provided but no orders!", ParseErrorCode.MissingOrders);
     }
 
     return new Order(colorCount, []);
