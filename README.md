@@ -7,7 +7,7 @@
 
 This is application uses NPM for scripting and runs via node.
 
-    $ git clone https://github.com/ihsw/paint-reader.git
+    $ git clone git@github.com:ihsw/paint-reader.git
     Cloning into 'paint-reader'...
     remote: Counting objects: 147, done.
     remote: Compressing objects: 100% (76/76), done.
