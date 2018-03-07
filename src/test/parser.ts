@@ -88,4 +88,12 @@ describe("Parser", () => {
             (err: ParseError) => err instanceof ParseError && err.code === ParseErrorCode.OverlappingPaintType
         );
     });
+
+    it("Should fail on multiple matte paints for one customer", () => {
+        const multipleMatteExample = fs.readFileSync("./test-fixtures/example-9-multiple-matte").toString();
+        assert.throws(
+            () => parse(multipleMatteExample),
+            (err: ParseError) => err instanceof ParseError && err.code === ParseErrorCode.MultipleMatte
+        );
+    });
 });

@@ -5,7 +5,8 @@ export enum ParseErrorCode {
     InvalidPaintFormat,
     InvalidColor,
     CustomerPaintOutOfRange,
-    OverlappingPaintType
+    OverlappingPaintType,
+    MultipleMatte
 }
 
 export class ParseError extends Error {
@@ -94,14 +95,22 @@ export const parse = (input: string): Order => {
         };
     });
 
-    // validating each customer's paint
-    const invalidCustomers = customers.filter((customer) => {
+    // validating each customer's paint to be within the given range
+    const paintOutOfRangeCustomers = customers.filter((customer) => {
         return customer.paints.filter(
             (paint) => !(paint.color > 0 && paint.color <= colorCount)
         ).length > 0;
     });
-    if (invalidCustomers.length > 0) {
-        throw new ParseError(`Order has ${invalidCustomers.length} customers with invalid paint colors!`, ParseErrorCode.CustomerPaintOutOfRange);
+    if (paintOutOfRangeCustomers.length > 0) {
+        throw new ParseError(`Order has ${paintOutOfRangeCustomers.length} customers with invalid paint colors!`, ParseErrorCode.CustomerPaintOutOfRange);
+    }
+
+    // validating each customer's paint listing to not have multiple orders of matte
+    const multipleMatteCustomers = customers.filter((customer) => {
+        return customer.paints.filter((paint) => paint.type === "M").length > 1;
+    });
+    if (multipleMatteCustomers.length > 0) {
+        throw new ParseError(`Order has ${multipleMatteCustomers.length} customers with >1 orders of matte paint!`, ParseErrorCode.MultipleMatte);
     }
 
     // resolving the list of colors
