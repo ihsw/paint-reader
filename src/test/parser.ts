@@ -37,7 +37,7 @@ describe("Parser", () => {
         );
     });
 
-    it.only("Should return customers", () => {
+    it("Should return customers", () => {
         const order = parse(palinExample);
         assert.equal(order.customers.length, 1);
         assert.deepEqual(order.customers, [<Customer>{
