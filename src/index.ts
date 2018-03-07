@@ -26,8 +26,6 @@ import { parse, Order, ParseError, ParseErrorCode } from "./parser";
         return;
     }
 
-    const output: string[] = Object.keys(order.colors).map((key) => {
-        return order.colors[Number(key)];
-    });
+    const output: string[] = Object.keys(order.colors).map((key) => order.colors[Number(key)]);
     console.log(output.join(" "));
 })();
