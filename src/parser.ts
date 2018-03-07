@@ -1,6 +1,6 @@
 export enum ParseErrorCode {
     BlankInput,
-    MissingOrders,
+    MissingCustomers,
     InvalidColorCount
 }
 
@@ -35,6 +35,8 @@ export class Order {
 }
 
 export const parse = (input: string): Order => {
+    input = input.trim();
+
     if (input.length === 0) {
         throw new ParseError("Blank input!", ParseErrorCode.BlankInput);
     }
@@ -53,8 +55,14 @@ export const parse = (input: string): Order => {
     }
 
     if (results.length === 1) {
-        throw new ParseError("A paint color count was provided but no orders!", ParseErrorCode.MissingOrders);
+        throw new ParseError("A paint color count was provided but no customers!", ParseErrorCode.MissingCustomers);
     }
 
-    return new Order(colorCount, []);
+    const customers = results.slice(1).map(() => {
+        return <Customer>{
+            paints: []
+        };
+    });
+
+    return new Order(colorCount, customers);
 };

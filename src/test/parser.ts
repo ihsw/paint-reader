@@ -10,10 +10,10 @@ describe("Parser", () => {
         assert.equal(parse(palinExample).colorCount, 1);
     });
 
-    it("Should fail on color count but no orders", () => {
+    it("Should fail on color count but no customers", () => {
         assert.throws(
             () => parse("5"),
-            (err: ParseError) => err instanceof ParseError && err.code === ParseErrorCode.MissingOrders
+            (err: ParseError) => err instanceof ParseError && err.code === ParseErrorCode.MissingCustomers
         );
     });
 
@@ -35,5 +35,9 @@ describe("Parser", () => {
             () => parse(invalidNanExample),
             (err: ParseError) => err instanceof ParseError && err.code === ParseErrorCode.InvalidColorCount
         );
+    });
+
+    it("Should return orders", () => {
+        assert.equal(parse(palinExample).customers.length, 1);
     });
 });
