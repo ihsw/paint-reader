@@ -2,7 +2,8 @@ export enum ParseErrorCode {
     BlankInput,
     MissingCustomers,
     InvalidColorCount,
-    InvalidPaintCount
+    InvalidPaintCount,
+    InvalidColor
 }
 
 export class ParseError extends Error {
@@ -59,16 +60,22 @@ export const parse = (input: string): Order => {
         throw new ParseError("A paint color count was provided but no customers!", ParseErrorCode.MissingCustomers);
     }
 
-    const customers = results.slice(1).map((result) => {
+    const customers = results.slice(1).map((result, resultIndex) => {
         const paintResults = result.split(" ");
         if (paintResults.length % 2 > 0) {
             throw new ParseError("Invalid paint count!", ParseErrorCode.InvalidPaintCount);
         }
 
         const paints: Paint[] = Array.from((new Array(paintResults.length / 2)).keys()).map((i) => {
+            const currentIndex = i * 2;
+            const color = Number(paintResults[currentIndex]);
+            if (isNaN(color)) {
+                throw new ParseError(`Color at line ${resultIndex + 1} is invalid!`, ParseErrorCode.InvalidColor);
+            }
+
             return <Paint>{
-                color: Number(paintResults[i]),
-                type: paintResults[i + 1]
+                color,
+                type: paintResults[currentIndex + 1]
             };
         });
 

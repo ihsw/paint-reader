@@ -37,11 +37,23 @@ describe("Parser", () => {
         );
     });
 
-    it("Should return customers", () => {
+    it("Should correctly parse plain customers", () => {
         const order = parse(palinExample);
         assert.equal(order.customers.length, 1);
         assert.deepEqual(order.customers, [<Customer>{
             paints: [{color: 1, type: "M"}]
         }]);
+    });
+
+    it("Should correctly parse complex customers", () => {
+        const complexExample = fs.readFileSync("./test-fixtures/example-3-complex").toString();
+
+        const order = parse(complexExample);
+        assert.equal(order.customers.length, 3);
+        assert.deepEqual(order.customers, <Customer[]>[
+            {paints: [{color: 1, type: "M"}, {color: 3, type: "G"}, {color: 5, type: "G"}]},
+            {paints: [{color: 2, type: "G"}, {color: 3, type: "M"}, {color: 4, type: "G"}]},
+            {paints: [{color: 5, type: "M"}]}
+        ]);
     });
 });
