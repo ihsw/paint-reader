@@ -7,7 +7,7 @@ describe("Parser", () => {
     const palinExample = fs.readFileSync("./test-fixtures/example-1-plain").toString();
 
     it("Should return the number of colors", () => {
-        assert.equal(parse(palinExample).colorCount, 1);
+        assert.equal(Object.keys(parse(palinExample).colors).length, 1);
     });
 
     it("Should fail on color count but no customers", () => {
@@ -26,7 +26,7 @@ describe("Parser", () => {
 
     it("Should strip comments from the input", () => {
         const commentsExample = fs.readFileSync("./test-fixtures/example-2-with-comments").toString();
-        assert.equal(parse(commentsExample).colorCount, 1);
+        assert.equal(Object.keys(parse(commentsExample).colors).length, 1);
     });
 
     it("Should fail on NaN as first input", () => {
@@ -67,9 +67,9 @@ describe("Parser", () => {
         const order = parse(complexExample);
         assert.equal(order.customers.length, 3);
         assert.deepEqual(order.customers, <Customer[]>[
-            {paints: [{color: 1, type: "M"}, {color: 3, type: "G"}, {color: 5, type: "G"}]},
-            {paints: [{color: 2, type: "G"}, {color: 3, type: "M"}, {color: 4, type: "G"}]},
-            {paints: [{color: 5, type: "M"}]}
+            {paints: [{color: 2, type: "M"}, {color: 1, type: "G"}, {color: 3, type: "G"}, {color: 4, type: "G"}, {color: 5, type: "G"}]},
+            {paints: [{color: 5, type: "G"}, {color: 3, type: "G"}, {color: 2, type: "M"}]},
+            {paints: [{color: 1, type: "G"}, {color: 2, type: "M"}]}
         ]);
     });
 
@@ -78,6 +78,14 @@ describe("Parser", () => {
         assert.throws(
             () => parse(paintOutOfRangeExample),
             (err: ParseError) => err instanceof ParseError && err.code === ParseErrorCode.CustomerPaintOutOfRange
+        );
+    });
+
+    it("Should fail on overlapping paint types", () => {
+        const overlappingTypeExample = fs.readFileSync("./test-fixtures/example-8-overlapping-type").toString();
+        assert.throws(
+            () => parse(overlappingTypeExample),
+            (err: ParseError) => err instanceof ParseError && err.code === ParseErrorCode.OverlappingPaintType
         );
     });
 });

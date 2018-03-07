@@ -4,7 +4,8 @@ export enum ParseErrorCode {
     InvalidColorCount,
     InvalidPaintFormat,
     InvalidColor,
-    CustomerPaintOutOfRange
+    CustomerPaintOutOfRange,
+    OverlappingPaintType
 }
 
 export class ParseError extends Error {
@@ -18,8 +19,8 @@ export class ParseError extends Error {
 
 type Type = "M" | " G";
 
-interface Color {
-    type: Type;
+interface Colors {
+    [key: number]: Type;
 }
 
 interface Paint {
@@ -31,16 +32,9 @@ export interface Customer {
     paints: Paint[];
 }
 
-export class Order {
-    colorCount: number;
+export interface Order {
     customers: Customer[];
-    colors: Color[];
-
-    constructor(colorCount: number, customers: Customer[]) {
-        this.colorCount = colorCount;
-        this.customers = customers;
-        this.colors = [];
-    }
+    colors: Colors;
 }
 
 export const parse = (input: string): Order => {
@@ -110,5 +104,25 @@ export const parse = (input: string): Order => {
         throw new ParseError(`Order has ${invalidCustomers.length} customers with invalid paint colors!`, ParseErrorCode.CustomerPaintOutOfRange);
     }
 
-    return new Order(colorCount, customers);
+    // resolving the list of colors
+    const colors: Colors = {};
+    for (const i in customers) {
+        const customer = customers[i];
+        for (const paint of customer.paints) {
+            if (!(paint.color in colors)) {
+                colors[paint.color] = paint.type;
+
+                continue;
+            }
+
+            if (colors[paint.color] !== paint.type) {
+                throw new ParseError(`Customer ${Number(i) + 1} cannot be satisfied, color ${paint.color} is already of type ${paint.type}!`, ParseErrorCode.OverlappingPaintType);
+            }
+        }
+    }
+
+    return {
+        colors,
+        customers
+    };
 };
