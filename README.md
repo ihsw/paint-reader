@@ -10,6 +10,8 @@ This is application uses NPM for scripting and runs via node.
     $ git clone https://github.com/ihsw/paint-reader.git
     $ npm install
     $ npm run build
-    $ cat ./example-3-complex | node .
+    $ cat ./test-fixtures/example-3-complex | node .
 
 This should output: `G M G G G`.
+
+Feel free to substitute the given example file for any other.
