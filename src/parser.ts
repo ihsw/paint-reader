@@ -1,7 +1,8 @@
 export enum ParseErrorCode {
     BlankInput,
     MissingCustomers,
-    InvalidColorCount
+    InvalidColorCount,
+    InvalidPaintCount
 }
 
 export class ParseError extends Error {
@@ -20,7 +21,7 @@ interface Paint {
     color: number;
 }
 
-interface Customer {
+export interface Customer {
     paints: Paint[];
 }
 
@@ -58,9 +59,21 @@ export const parse = (input: string): Order => {
         throw new ParseError("A paint color count was provided but no customers!", ParseErrorCode.MissingCustomers);
     }
 
-    const customers = results.slice(1).map(() => {
+    const customers = results.slice(1).map((result) => {
+        const paintResults = result.split(" ");
+        if (paintResults.length % 2 > 0) {
+            throw new ParseError("Invalid paint count!", ParseErrorCode.InvalidPaintCount);
+        }
+
+        const paints: Paint[] = Array.from((new Array(paintResults.length / 2)).keys()).map((i) => {
+            return <Paint>{
+                color: Number(paintResults[i]),
+                type: paintResults[i + 1]
+            };
+        });
+
         return <Customer>{
-            paints: []
+            paints
         };
     });
 

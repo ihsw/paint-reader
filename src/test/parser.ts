@@ -1,7 +1,7 @@
 import * as assert from "assert";
 import * as fs from "fs";
 
-import { parse, ParseError, ParseErrorCode } from "../parser";
+import { parse, ParseError, ParseErrorCode, Customer } from "../parser";
 
 describe("Parser", () => {
     const palinExample = fs.readFileSync("./test-fixtures/example-1-plain").toString();
@@ -37,7 +37,11 @@ describe("Parser", () => {
         );
     });
 
-    it("Should return orders", () => {
-        assert.equal(parse(palinExample).customers.length, 1);
+    it.only("Should return customers", () => {
+        const order = parse(palinExample);
+        assert.equal(order.customers.length, 1);
+        assert.deepEqual(order.customers, [<Customer>{
+            paints: [{color: 1, type: "M"}]
+        }]);
     });
 });
